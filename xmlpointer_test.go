@@ -126,6 +126,21 @@ var xmlDataCheck = map[string]xmlTestData{
 
 func Test_XMLPointer(t *testing.T) {
 	var err error
+	if _, err := NewXMLPointer(""); err == nil {
+		t.Fatal("failed test string", err)
+	} else {
+		t.Logf("failed test %#v", err)
+	}
+
+	if _, err := NewXMLPointer([]byte("s")); err == nil {
+		t.Fatal("failed test bytes", err)
+	} else {
+		t.Logf("failed test %#v", err)
+	}
+	_, err = NewXMLPointer([]byte(xmlDataTest))
+	if err != nil {
+		t.Fatalf("failed test %#v", err)
+	}
 	xp, err := NewXMLPointer(xmlDataTest)
 	if err != nil {
 		t.Fatalf("failed test %#v", err)

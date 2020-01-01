@@ -28,8 +28,6 @@ func NewXMLPointer(inputdata interface{}) (*XMLPointer, error) {
 			return nil, err
 		}
 		return &XMLPointer{data}, nil
-	case map[string]interface{}:
-		return &XMLPointer{Data: converteddata}, nil
 	default:
 		return &XMLPointer{Data: inputdata}, nil
 	}
