@@ -7,11 +7,11 @@ import (
 var xmlDataTest = `
 <?xml version="1.0" encoding="UTF-8"?>
 <sar:ObjectDirection xmlns:sar="http://earth.esa.int/sar" xmlns:eop="http://earth.esa.int/eop" xmlns:gml="http://www.opengis.net/gml" xmlns:schemaLocation="http://earth.esa.int/sar" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2.1">
-    <gml:metaDataProperty>
-        <eop:ObjectDirectionMetaData>
-            <eop:offnadirAngle>34.30</eop:offnadirAngle>
-            <eop:orbitDirection>ASCENDING</eop:orbitDirection>
-        </eop:ObjectDirectionMetaData>
+<gml:metaDataProperty>
+<eop:ObjectDirectionMetaData>
+<eop:offnadirAngle>34.30</eop:offnadirAngle>
+<eop:orbitDirection>ASCENDING</eop:orbitDirection>
+</eop:ObjectDirectionMetaData>
     </gml:metaDataProperty>
     <gml:validTime>
         <gml:TimePeriod>
@@ -27,7 +27,7 @@ var xmlDataTest = `
                 <eop:orbitType>LEO</eop:orbitType>
             </eop:platform>
             <eop:instrument>
-                <eop:shortName>SAR</eop:shortName>
+                <eop:shortName>true</eop:shortName>
             </eop:instrument>
             <eop:sensor>
                 <eop:sensorType>RADAR</eop:sensorType>
@@ -35,12 +35,15 @@ var xmlDataTest = `
             </eop:sensor>
             <eop:acquisitionParameters>
                 <sar:Acquisition>
-                    <sar:polarisationChannels>VV</sar:polarisationChannels>
+                    <sar:polarisationChannels>4655</sar:polarisationChannels>
                     <sar:antennaLookDirection>RIGHT</sar:antennaLookDirection>
                 </sar:Acquisition>
             </eop:acquisitionParameters>
         </eop:ObjectDirectionEquipment>
     </gml:using>
+    <!--
+    ノーコメント
+    -->
 </sar:ObjectDirection>
 `
 
