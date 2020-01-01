@@ -86,7 +86,17 @@ func (p *ParsedXML) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 			}
 			p.ChildNodes = append(p.ChildNodes, data)
 			if v, ok := data.ChildNodesMap[data.Name.Local]; ok {
-				p.ChildNodesMap[data.Name.Local] = v
+				if nodedata, exist := p.ChildNodesMap[data.Name.Local]; exist {
+					switch convData := nodedata.(type) {
+					case []interface{}:
+						convData = append(convData, v)
+						p.ChildNodesMap[data.Name.Local] = convData
+					default:
+						p.ChildNodesMap[data.Name.Local] = []interface{}{convData, v}
+					}
+				} else {
+					p.ChildNodesMap[data.Name.Local] = v
+				}
 			} else {
 				p.ChildNodesMap[data.Name.Local] = data.ChildNodesMap
 			}
