@@ -94,17 +94,14 @@ func (p *ParsedXML) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 				p.ChildNodesMap[data.Name.Local] = data.ChildNodesMap
 			}
 		case xml.CharData:
-			tokendata := string(p.trimData(token.(xml.CharData).Copy()))
-			if tokendata != "" {
-				p.ChildNodes = append(p.ChildNodes, tokendata)
-				p.ChildNodesMap[start.Name.Local] = p.cast(tokendata)
+			tokendata := p.trimData(token.(xml.CharData).Copy())
+			p.ChildNodes = append(p.ChildNodes, xml.CharData(tokendata))
+			tokendatastr := string(tokendata)
+			if tokendatastr != "" {
+				p.ChildNodesMap[start.Name.Local] = p.cast(tokendatastr)
 			}
 		case xml.Comment:
-			tokendata := string(p.trimData(token.(xml.Comment).Copy()))
-			if tokendata != "" {
-				p.ChildNodes = append(p.ChildNodes, tokendata)
-				p.ChildNodesMap[start.Name.Local] = p.cast(tokendata)
-			}
+			p.ChildNodes = append(p.ChildNodes, token.(xml.Comment).Copy())
 		}
 	}
 }
@@ -119,10 +116,10 @@ func (p *ParsedXML) cast(v string) interface{} {
 	if f, err := strconv.ParseBool(v); err == nil {
 		return f
 	}
-	if f, err := strconv.ParseFloat(v, 64); err == nil {
+	if f, err := strconv.ParseInt(v, 10, 64); err == nil {
 		return f
 	}
-	if f, err := strconv.ParseInt(v, 10, 64); err == nil {
+	if f, err := strconv.ParseFloat(v, 64); err == nil {
 		return f
 	}
 	return v
@@ -131,11 +128,7 @@ func (p *ParsedXML) cast(v string) interface{} {
 // trimData trims space and line feed
 func (p *ParsedXML) trimData(v []byte) []byte {
 	str := string(v)
-	str = strings.TrimSpace(strings.NewReplacer(
-		"\r\n", "",
-		"\r", "",
-		"\n", "",
-	).Replace(str))
+	str = strings.TrimSpace(str)
 	return []byte(str)
 }
 
