@@ -41,16 +41,16 @@ func (p *ParsedXML) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Attr = p.Attr
 	e.EncodeToken(start)
 	for _, v := range p.ChildNodes {
-		switch v.(type) {
+		switch converted := v.(type) {
 		case *ParsedXML:
-			child := v.(*ParsedXML)
+			child := converted
 			if err := e.Encode(child); err != nil {
 				return err
 			}
 		case xml.CharData:
-			e.EncodeToken(v.(xml.CharData))
+			e.EncodeToken(converted)
 		case xml.Comment:
-			e.EncodeToken(v.(xml.Comment))
+			e.EncodeToken(converted)
 		}
 	}
 	e.EncodeToken(start.End())
@@ -72,7 +72,7 @@ func (p *ParsedXML) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 			}
 			return err
 		}
-		switch token.(type) {
+		switch convertedToken := token.(type) {
 		case xml.EndElement:
 			childmap := make(map[string]interface{}, 0)
 			if v, ok := p.ChildNodesMap[start.Name.Local]; ok {
@@ -82,9 +82,8 @@ func (p *ParsedXML) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 			}
 			p.ChildNodesMap = childmap
 		case xml.StartElement:
-			tok := token.(xml.StartElement)
 			var data *ParsedXML
-			if err := d.DecodeElement(&data, &tok); err != nil {
+			if err := d.DecodeElement(&data, &convertedToken); err != nil {
 				return err
 			}
 			p.ChildNodes = append(p.ChildNodes, data)
@@ -94,14 +93,14 @@ func (p *ParsedXML) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 				p.ChildNodesMap[data.Name.Local] = data.ChildNodesMap
 			}
 		case xml.CharData:
-			tokendata := p.trimData(token.(xml.CharData).Copy())
+			tokendata := p.trimData(convertedToken.Copy())
 			p.ChildNodes = append(p.ChildNodes, xml.CharData(tokendata))
 			tokendatastr := string(tokendata)
 			if tokendatastr != "" {
 				p.ChildNodesMap[start.Name.Local] = p.cast(tokendatastr)
 			}
 		case xml.Comment:
-			p.ChildNodes = append(p.ChildNodes, token.(xml.Comment).Copy())
+			p.ChildNodes = append(p.ChildNodes, convertedToken.Copy())
 		}
 	}
 }
