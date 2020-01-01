@@ -140,7 +140,7 @@ func (p *ParsedXML) trimData(v []byte) []byte {
 	return []byte(str)
 }
 
-// ToXML() generate XML bytes for ParsedXML struct
+// ToXML generate XML bytes for ParsedXML struct
 func (p *ParsedXML) ToXML() ([]byte, error) {
 	w := &bytes.Buffer{}
 	w.Write([]byte(xml.Header))
