@@ -59,12 +59,12 @@ var xmlDataTest = `
 var timecheck, _ = time.Parse(time.RFC3339, "2010-08-17T13:23:50Z")
 
 var xmlDataCheck = map[string]xmlTestData{
-	"test1": xmlTestData{
+	"test1": {
 		Key:          ".",
 		CheckDataXML: xmlDataTest,
 		ResultHasErr: false,
 	},
-	"test2": xmlTestData{
+	"test2": {
 		Key: "ObjDirectory.metaDataProperty",
 		CheckDataXML: `
 <aop:ObjDirectoryMetaData>
@@ -74,7 +74,7 @@ var xmlDataCheck = map[string]xmlTestData{
 `,
 		ResultHasErr: false,
 	},
-	"test3": xmlTestData{
+	"test3": {
 		Key: "ObjDirectory.validTime",
 		CheckDataXML: `
 <gml:TimePeriod>
@@ -85,7 +85,7 @@ var xmlDataCheck = map[string]xmlTestData{
 `,
 		ResultHasErr: false,
 	},
-	"test4": xmlTestData{
+	"test4": {
 		Key: "ObjDirectory.using",
 		CheckDataXML: `
 	<aop:ObjDirectoryEquipment>
@@ -112,12 +112,12 @@ var xmlDataCheck = map[string]xmlTestData{
 `,
 		ResultHasErr: false,
 	},
-	"test5": xmlTestData{
+	"test5": {
 		Key:          "ObjDirectory.validTime.TimePeriod.beginPoint",
 		CheckData:    timecheck,
 		ResultHasErr: false,
 	},
-	"test6": xmlTestData{
+	"test6": {
 		Key:          "ObjDirectory.validTime.beginPoint",
 		CheckData:    timecheck,
 		ResultHasErr: true,
