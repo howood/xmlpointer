@@ -41,16 +41,16 @@ func (p *ParsedXML) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Attr = p.Attr
 	e.EncodeToken(start)
 	for _, v := range p.ChildNodes {
-		switch converted := v.(type) {
+		switch convV := v.(type) {
 		case *ParsedXML:
-			child := converted
+			child := convV
 			if err := e.Encode(child); err != nil {
 				return err
 			}
 		case xml.CharData:
-			e.EncodeToken(converted)
+			e.EncodeToken(convV)
 		case xml.Comment:
-			e.EncodeToken(converted)
+			e.EncodeToken(convV)
 		}
 	}
 	e.EncodeToken(start.End())
@@ -61,9 +61,7 @@ func (p *ParsedXML) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 func (p *ParsedXML) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	p.Name = start.Name
 	p.Attr = start.Attr
-	if p.ChildNodesMap == nil {
-		p.ChildNodesMap = make(map[string]interface{}, 0)
-	}
+	p.ChildNodesMap = make(map[string]interface{}, 0)
 	for {
 		token, err := d.Token()
 		if err != nil {
@@ -72,7 +70,7 @@ func (p *ParsedXML) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 			}
 			return err
 		}
-		switch convertedToken := token.(type) {
+		switch convToken := token.(type) {
 		case xml.EndElement:
 			childmap := make(map[string]interface{}, 0)
 			if v, ok := p.ChildNodesMap[start.Name.Local]; ok {
@@ -83,7 +81,7 @@ func (p *ParsedXML) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 			p.ChildNodesMap = childmap
 		case xml.StartElement:
 			var data *ParsedXML
-			if err := d.DecodeElement(&data, &convertedToken); err != nil {
+			if err := d.DecodeElement(&data, &convToken); err != nil {
 				return err
 			}
 			p.ChildNodes = append(p.ChildNodes, data)
@@ -93,14 +91,14 @@ func (p *ParsedXML) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 				p.ChildNodesMap[data.Name.Local] = data.ChildNodesMap
 			}
 		case xml.CharData:
-			tokendata := p.trimData(convertedToken.Copy())
+			tokendata := p.trimData(convToken.Copy())
 			p.ChildNodes = append(p.ChildNodes, xml.CharData(tokendata))
 			tokendatastr := string(tokendata)
 			if tokendatastr != "" {
 				p.ChildNodesMap[start.Name.Local] = p.cast(tokendatastr)
 			}
 		case xml.Comment:
-			p.ChildNodes = append(p.ChildNodes, convertedToken.Copy())
+			p.ChildNodes = append(p.ChildNodes, convToken.Copy())
 		}
 	}
 }
