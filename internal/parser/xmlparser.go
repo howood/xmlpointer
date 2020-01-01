@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/xml"
 	"io"
-	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -62,7 +61,7 @@ func (p *ParsedXML) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 func (p *ParsedXML) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	p.Name = start.Name
 	p.Attr = start.Attr
-	if p.ChildNodesMap == nil || reflect.DeepEqual(p.ChildNodesMap, map[string]interface{}{}) == true {
+	if p.ChildNodesMap == nil {
 		p.ChildNodesMap = make(map[string]interface{}, 0)
 	}
 	for {
