@@ -66,9 +66,8 @@ func (xp *XMLPointer) searchKey(xmldata interface{}, xmlKey string) (interface{}
 	case map[string]interface{}:
 		if val, ok := v[xmlKey]; ok {
 			return val, nil
-		} else {
-			return nil, fmt.Errorf("not exist: %s", xmlKey)
 		}
+		return nil, fmt.Errorf("not exist: %s", xmlKey)
 	case []interface{}:
 		ret := make([]interface{}, 0)
 		for _, vv := range v {

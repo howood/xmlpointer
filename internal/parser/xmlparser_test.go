@@ -52,6 +52,9 @@ func Test_XMLParser(t *testing.T) {
 	t.Log(xmlobj)
 
 	parsedxml, err := NewXParsedXML([]byte(xmlDataTest))
+	if err != nil {
+		t.Fatalf("failed test %#v", err)
+	}
 	t.Log(parsedxml.Name)
 	t.Log(parsedxml.Attr)
 	xmlbytes, err := parsedxml.ToXML()
