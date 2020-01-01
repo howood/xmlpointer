@@ -44,6 +44,12 @@ var xmlDataTest = `
     <!--
     ノーコメント
     -->
+	<arrayitem>
+		<item>aaa</item>
+		<item>bbb</item>
+		<item>ccc</item>
+		<item>ddd</item>
+	</arrayitem>
 </sar:ObjectDirection>
 `
 

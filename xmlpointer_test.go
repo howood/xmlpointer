@@ -52,7 +52,13 @@ var xmlDataTest = `
                 </ear:Aquarium>
             </aop:aquariumParameters>
         </aop:ObjDirectoryEquipment>
-    </gml:using>
+	</gml:using>
+	<arrayitem>
+		<item>aaa</item>
+		<item>bbb</item>
+		<item>ccc</item>
+		<item>ddd</item>
+	</arrayitem>
 </ear:ObjDirectory>
 `
 
@@ -122,6 +128,16 @@ var xmlDataCheck = map[string]xmlTestData{
 		CheckData:    timecheck,
 		ResultHasErr: true,
 	},
+	"test7": {
+		Key:          "ObjDirectory.validTime.[*].beginPoint",
+		CheckData:    timecheck,
+		ResultHasErr: true,
+	},
+	"test8": {
+		Key:          "ObjDirectory.arrayitem.item",
+		CheckData:    []interface{}{"aaa", "bbb", "ccc", "ddd"},
+		ResultHasErr: false,
+	},
 }
 
 func Test_XMLPointer(t *testing.T) {
@@ -145,6 +161,7 @@ func Test_XMLPointer(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed test %#v", err)
 	}
+	t.Log(xp.Data)
 	for k, v := range xmlDataCheck {
 		xmldata, err := xp.Query(v.Key)
 		if (err != nil) != v.ResultHasErr {
@@ -158,6 +175,12 @@ func Test_XMLPointer(t *testing.T) {
 				case time.Time:
 					if reflect.DeepEqual(xmldata, v.CheckData) == false {
 						t.Log(xmldata)
+						t.Fatalf("not equal data %v, %v", xmldata, v.CheckData)
+					}
+				case []interface{}:
+					if reflect.DeepEqual(xmldata, v.CheckData) == false {
+						t.Log(xmldata)
+						t.Log(reflect.ValueOf(xmldata).Type())
 						t.Fatalf("not equal data %v, %v", xmldata, v.CheckData)
 					}
 				default:
