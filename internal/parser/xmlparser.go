@@ -132,6 +132,7 @@ func (p *ParsedXML) trimData(v []byte) []byte {
 	return []byte(str)
 }
 
+// mergeToArray maege two interface value to array
 func (p *ParsedXML) mergeToArray(parent interface{}, child interface{}) []interface{} {
 	switch parentData := parent.(type) {
 	case []interface{}:
