@@ -9,3 +9,32 @@
 [license]: https://github.com/howood/xmlpointer/blob/master/LICENSE
 
 # xmlpointer
+
+XMLPointer provides XML Pointers and Decodeing to Map[string]interface{}.
+
+# Install
+
+```
+$ go get -u github.com/howood/xmlpointer
+```
+
+# Usage
+
+```
+	// Create new
+	xp, err := NewXMLPointer(xmlDataTest)
+	if err != nil {
+		...
+	}
+
+	// Pointing with key
+	xmldata, err := xp.Query("Doc.Body.Item")
+	if err != nil {
+		...
+	}
+
+	// Map
+	xmlMap := xp.Data
+
+
+```
