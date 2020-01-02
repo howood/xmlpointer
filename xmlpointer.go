@@ -52,14 +52,6 @@ func (xp *XMLPointer) Query(key string) (interface{}, error) {
 
 // searchKey returns data from xmldata with xmlKey
 func (xp *XMLPointer) searchKey(xmldata interface{}, xmlKey string) (interface{}, error) {
-	if xmlKey == "[*]" {
-		switch v := xmldata.(type) {
-		case []interface{}:
-			xmldata = v
-		default:
-			return nil, fmt.Errorf("not array: %s", xmlKey)
-		}
-	}
 	switch v := xmldata.(type) {
 	case map[string]interface{}:
 		if val, ok := v[xmlKey]; ok {
