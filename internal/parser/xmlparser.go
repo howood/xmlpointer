@@ -85,27 +85,20 @@ func (p *ParsedXML) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 				return err
 			}
 			p.ChildNodes = append(p.ChildNodes, data)
-			if v, ok := data.ChildNodesMap[data.Name.Local]; ok {
-				if nodedata, exist := p.ChildNodesMap[data.Name.Local]; exist {
-					switch convData := nodedata.(type) {
-					case []interface{}:
-						convData = append(convData, v)
-						p.ChildNodesMap[data.Name.Local] = convData
-					default:
-						p.ChildNodesMap[data.Name.Local] = []interface{}{convData, v}
-					}
-				} else {
-					p.ChildNodesMap[data.Name.Local] = v
-				}
+			childval, childok := data.ChildNodesMap[data.Name.Local]
+			parentval, parentok := p.ChildNodesMap[data.Name.Local]
+			if childok && parentok {
+				p.ChildNodesMap[data.Name.Local] = p.mergeToArray(parentval, childval)
+			} else if childok && !parentok {
+				p.ChildNodesMap[data.Name.Local] = childval
 			} else {
 				p.ChildNodesMap[data.Name.Local] = data.ChildNodesMap
 			}
 		case xml.CharData:
 			tokendata := p.trimData(convToken.Copy())
 			p.ChildNodes = append(p.ChildNodes, xml.CharData(tokendata))
-			tokendatastr := string(tokendata)
-			if tokendatastr != "" {
-				p.ChildNodesMap[start.Name.Local] = p.cast(tokendatastr)
+			if v := string(tokendata); v != "" {
+				p.ChildNodesMap[start.Name.Local] = p.cast(v)
 			}
 		case xml.Comment:
 			p.ChildNodes = append(p.ChildNodes, convToken.Copy())
@@ -137,6 +130,17 @@ func (p *ParsedXML) trimData(v []byte) []byte {
 	str := string(v)
 	str = strings.TrimSpace(str)
 	return []byte(str)
+}
+
+func (p *ParsedXML) mergeToArray(parent interface{}, child interface{}) []interface{} {
+	switch parentData := parent.(type) {
+	case []interface{}:
+		parentData = append(parentData, child)
+		return parentData
+	default:
+		return []interface{}{parentData, child}
+	}
+
 }
 
 // ToXML generate XML bytes for ParsedXML struct
