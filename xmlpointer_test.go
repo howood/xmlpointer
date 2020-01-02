@@ -59,6 +59,24 @@ var xmlDataTest = `
 		<item>ccc</item>
 		<item>ddd</item>
 	</arrayitem>
+	<arrayitem2>
+		<item2>
+			<innteritem>aaa111</innteritem>
+			<innteritem2>aaa222</innteritem2>
+		</item2>
+		<item2>
+			<innteritem>bbb111</innteritem>
+			<innteritem2>bbb222</innteritem2>
+		</item2>
+		<item2>
+			<innteritem>ccc111</innteritem>
+			<innteritem2>ccc222</innteritem2>
+		</item2>
+		<item2>
+			<innteritem>ddd111</innteritem>
+			<innteritem2>ddd222</innteritem2>
+		</item2>
+	</arrayitem2>
 </ear:ObjDirectory>
 `
 
@@ -129,14 +147,19 @@ var xmlDataCheck = map[string]xmlTestData{
 		ResultHasErr: true,
 	},
 	"test7": {
-		Key:          "ObjDirectory.validTime.[*].beginPoint",
-		CheckData:    timecheck,
-		ResultHasErr: true,
-	},
-	"test8": {
 		Key:          "ObjDirectory.arrayitem.item",
 		CheckData:    []interface{}{"aaa", "bbb", "ccc", "ddd"},
 		ResultHasErr: false,
+	},
+	"test8": {
+		Key:          "ObjDirectory.arrayitem2.item2.innteritem",
+		CheckData:    []interface{}{"aaa111", "bbb111", "ccc111", "ddd111"},
+		ResultHasErr: false,
+	},
+	"test9": {
+		Key:          "ObjDirectory.arrayitem2.item2.xxxxx",
+		CheckData:    []interface{}{"aaa111", "bbb111", "ccc111", "ddd111"},
+		ResultHasErr: true,
 	},
 }
 
