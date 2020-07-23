@@ -1,3 +1,3 @@
 module github.com/howood/xmlpointer
 
-go 1.13
+go 1.14
