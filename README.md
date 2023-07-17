@@ -6,7 +6,7 @@
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)][license]
 
 [release]: https://github.com/howood/xmlpointer/releases
-[actions]: https://github.com/howood/cryptotools/actions
+[actions]: https://github.com/howood/xmlpointer/actions
 [license]: https://github.com/howood/xmlpointer/blob/master/LICENSE
 
 # xmlpointer
